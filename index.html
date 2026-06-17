@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>王莉（嫚彤）· 创作者诊断报告</title>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #f5f5f7; font-family: Georgia, serif; color: #1d1d1f; }
+
+  .header {
+    background: linear-gradient(135deg, #6e45e2 0%, #88d3ce 100%);
+    color: white; padding: 40px 48px 32px;
+  }
+  .header h1 { font-size: 32px; font-weight: 700; letter-spacing: -0.5px; }
+  .header .sub { margin-top: 8px; opacity: 0.85; font-size: 14px; }
+  .header .badges { margin-top: 16px; display: flex; gap: 10px; flex-wrap: wrap; }
+  .badge { background: rgba(255,255,255,0.2); border-radius: 20px; padding: 4px 14px; font-size: 13px; }
+
+  .container { max-width: 1100px; margin: 0 auto; padding: 32px 24px; }
+
+  .section { margin-bottom: 28px; }
+  .section-title {
+    font-size: 18px; font-weight: 700; color: #1d1d1f;
+    padding-bottom: 10px; border-bottom: 2px solid #6e45e2;
+    margin-bottom: 18px;
+  }
+  .section-title span { color: #6e45e2; margin-right: 6px; }
+
+  .profile-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+  .stat-card {
+    background: white; border-radius: 14px; padding: 20px 18px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.06); text-align: center;
+  }
+  .stat-card .label { font-size: 12px; color: #86868b; margin-bottom: 6px; }
+  .stat-card .value { font-size: 26px; font-weight: 700; color: #1d1d1f; }
+  .stat-card .unit { font-size: 13px; color: #86868b; margin-left: 2px; }
+  .stat-card .sub-val { font-size: 12px; color: #86868b; margin-top: 4px; }
+
+  .trend-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .trend-card { background: white; border-radius: 14px; padding: 18px; box-shadow: 0 2px 10px rgba(0,0,0,0.06); }
+  .trend-card .t-label { font-size: 12px; color: #86868b; margin-bottom: 4px; }
+  .trend-card .t-val { font-size: 22px; font-weight: 700; }
+  .trend-card .t-bench { font-size: 11px; color: #86868b; margin-top: 4px; }
+  .good { color: #30d158; }
+  .warn { color: #ff9f0a; }
+  .bad { color: #ff3b30; }
+
+  .charts-row { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .chart-card { background: white; border-radius: 14px; padding: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.06); }
+  .chart-card .c-title { font-size: 14px; font-weight: 600; margin-bottom: 12px; }
+  .chart-box { width: 100%; height: 240px; }
+
+  .notes-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; }
+  .note-card { background: white; border-radius: 14px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.06); transition: transform 0.2s; }
+  .note-card:hover { transform: translateY(-3px); }
+  .note-card .cover { width: 100%; aspect-ratio: 3/4; object-fit: cover; display: none; }
+  .note-card .cover-placeholder {
+    width: 100%; aspect-ratio: 3/4; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; font-size: 28px; gap: 8px;
+  }
+  .note-card .cover-placeholder span { font-size: 11px; color: rgba(255,255,255,0.85); font-family: monospace; }
+  .note-card.loaded .cover { display: block; }
+  .note-card.loaded .cover-placeholder { display: none; }
+  .note-card .note-body { padding: 10px 10px 12px; }
+  .note-tag { display: inline-block; font-size: 10px; padding: 2px 7px; border-radius: 10px; margin-bottom: 6px; font-weight: 600; }
+  .tag-video { background: #ffe5e5; color: #ff2d55; }
+  .tag-warn { background: #fff3cd; color: #b45309; font-size: 10px; padding: 2px 6px; border-radius: 6px; margin-left: 3px; }
+  .tag-ok { background: #d1fae5; color: #065f46; font-size: 10px; padding: 2px 6px; border-radius: 6px; margin-left: 3px; }
+  .note-metrics { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; margin-top: 6px; }
+  .note-metric { font-size: 11px; color: #86868b; }
+  .note-metric b { color: #1d1d1f; font-size: 12px; }
+  .note-link { display: block; margin-top: 8px; font-size: 11px; color: #6e45e2; text-decoration: none; }
+
+  .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .compare-card { background: white; border-radius: 14px; padding: 22px; box-shadow: 0 2px 10px rgba(0,0,0,0.06); }
+  .compare-card.best { border-top: 4px solid #30d158; }
+  .compare-card.worst { border-top: 4px solid #ff3b30; }
+  .compare-card h3 { font-size: 15px; font-weight: 700; margin-bottom: 14px; }
+  .metrics-row { display: flex; gap: 16px; margin-bottom: 14px; }
+  .m-item { text-align: center; flex: 1; }
+  .m-item .mv { font-size: 22px; font-weight: 700; }
+  .m-item .ml { font-size: 11px; color: #86868b; margin-top: 2px; }
+  .analysis-block { margin-top: 14px; }
+  .analysis-block .a-title { font-size: 13px; font-weight: 600; margin-bottom: 8px; }
+  .analysis-block ul { padding-left: 18px; }
+  .analysis-block ul li { font-size: 13px; color: #3c3c3e; line-height: 1.7; }
+
+  .source-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .source-table th { background: #f5f5f7; padding: 10px 12px; text-align: left; font-weight: 600; color: #86868b; }
+  .source-table td { padding: 10px 12px; border-bottom: 1px solid #f5f5f7; }
+
+  .problem-list { display: flex; flex-direction: column; gap: 12px; }
+  .problem-item { background: white; border-radius: 12px; padding: 16px 18px; box-shadow: 0 2px 10px rgba(0,0,0,0.06); display: flex; gap: 14px; align-items: flex-start; }
+  .p-num { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: white; flex-shrink: 0; }
+  .p1 { background: #ff3b30; } .p2 { background: #ff3b30; } .p3 { background: #ff9f0a; } .p4 { background: #ff9f0a; } .p5 { background: #30d158; }
+  .p-content .p-title { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+  .p-content .p-desc { font-size: 13px; color: #3c3c3e; line-height: 1.6; }
+
+  .warn-box { background: #fff8e1; border-left: 4px solid #ff9f0a; border-radius: 8px; padding: 14px 18px; margin-bottom: 16px; font-size: 13px; color: #7c5500; line-height: 1.7; }
+  .warn-box strong { color: #b45309; }
+
+  .suggest-table { width: 100%; border-collapse: collapse; font-size: 13px; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.06); }
+  .suggest-table th { background: #6e45e2; color: white; padding: 12px 14px; text-align: left; font-weight: 600; }
+  .suggest-table td { padding: 12px 14px; border-bottom: 1px solid #f5f5f7; vertical-align: top; }
+  .suggest-table tr:last-child td { border-bottom: none; }
+  .suggest-table .dir { font-weight: 600; color: #6e45e2; }
+
+  .tips-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .tip-card { background: white; border-radius: 12px; padding: 18px; box-shadow: 0 2px 10px rgba(0,0,0,0.06); }
+  .tip-card h4 { font-size: 14px; font-weight: 700; margin-bottom: 10px; }
+  .tip-card .bad-tip { color: #ff3b30; font-size: 13px; margin-bottom: 6px; }
+  .tip-card .good-tip { color: #30d158; font-size: 13px; margin-bottom: 4px; }
+
+  .strategy-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .strat-card { background: white; border-radius: 12px; padding: 16px; box-shadow: 0 2px 10px rgba(0,0,0,0.06); text-align: center; }
+  .strat-card .s-icon { font-size: 28px; margin-bottom: 8px; }
+  .strat-card .s-title { font-size: 14px; font-weight: 700; margin-bottom: 6px; }
+  .strat-card .s-desc { font-size: 12px; color: #86868b; line-height: 1.6; }
+
+  .footer { text-align: center; padding: 32px; color: #86868b; font-size: 12px; }
+
+  @media (max-width: 768px) {
+    .profile-grid, .trend-grid, .charts-row, .compare-grid, .tips-grid, .strategy-grid { grid-template-columns: 1fr; }
+    .notes-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>🎵 王莉（嫚彤）· 创作者诊断报告</h1>
+  <div class="sub">UID: 609f4e47000000000101ce88 &nbsp;|&nbsp; red_id: 4285576946 &nbsp;|&nbsp; 生成日期: 2026-06-17</div>
+  <div class="badges">
+    <span class="badge">👩 女 · 40+岁</span>
+    <span class="badge">📍 北京</span>
+    <span class="badge">🎵 音乐·演出记录 / 儿童写真</span>
+    <span class="badge">🏅 账号等级 Lv.3</span>
+    <span class="badge">🎬 纯视频账号</span>
+    <span class="badge">🕐 创作 228 天</span>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- 基础画像 -->
+  <div class="section">
+    <div class="section-title"><span>①</span>基础画像</div>
+    <div class="profile-grid">
+      <div class="stat-card">
+        <div class="label">粉丝量</div>
+        <div class="value">82<span class="unit">人</span></div>
+        <div class="sub-val">真实粉丝 73</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">笔记总数</div>
+        <div class="value">17<span class="unit">篇</span></div>
+        <div class="sub-val">全部为视频</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">创作天数</div>
+        <div class="value">228<span class="unit">天</span></div>
+        <div class="sub-val">约7.5个月</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">视频占比</div>
+        <div class="value">100<span class="unit">%</span></div>
+        <div class="sub-val">纯视频创作者</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">28d 发布量</div>
+        <div class="value">1<span class="unit">篇</span></div>
+        <div class="sub-val">发布极低活</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">28d 阅读量</div>
+        <div class="value">198</div>
+        <div class="sub-val">曝光量 1,590</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">28d 涨粉</div>
+        <div class="value">+1</div>
+        <div class="sub-val">增长几乎停滞</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">兴趣标签</div>
+        <div class="value" style="font-size:14px;padding-top:6px;">儿童写真</div>
+        <div class="sub-val">音乐·演出记录</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 近期核心指标 -->
+  <div class="section">
+    <div class="section-title"><span>②</span>近期核心指标（28d）</div>
+    <div class="trend-grid">
+      <div class="trend-card">
+        <div class="t-label">CTR（点击率）</div>
+        <div class="t-val bad">2.46%</div>
+        <div class="t-bench">大盘均值 15.70% ↓↓↓ &nbsp;｜&nbsp; 垂类粉段均值 20.01% ↓↓↓</div>
+      </div>
+      <div class="trend-card">
+        <div class="t-label">CES 转化率</div>
+        <div class="t-val bad">0.94%</div>
+        <div class="t-bench">大盘均值 2.60%，差距显著</div>
+      </div>
+      <div class="trend-card">
+        <div class="t-label">赞藏总量（28d）</div>
+        <div class="t-val bad">7</div>
+        <div class="t-bench">互动极度匮乏，平均每篇仅7个</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 柔性标签预警 -->
+  <div class="section">
+    <div class="warn-box">
+      ⚠️ <strong>重要预警：近5篇笔记中，3篇命中柔性标签</strong>（6a31385f、6a293483、69f1c29a），可能正在影响流量分发。建议联系社区审核「百科全薯」评估是否去除标签。柔性标签是当前账号流量低迷的直接原因之一。
+    </div>
+  </div>
+
+  <!-- 近期笔记数据 -->
+  <div class="section">
+    <div class="section-title"><span>③</span>近期笔记数据速览（近 5 篇）</div>
+    <div class="notes-grid">
+
+      <!-- 6a3138fe 最新，数据刚跑 -->
+      <div class="note-card">
+        <div class="cover-placeholder" style="background:linear-gradient(135deg,#6e45e2,#9c27b0)">🎵<span>6a3138fe</span></div>
+        <img class="cover" src="covers/6a3138fe.jpg" alt="封面" onload="this.closest('.note-card').classList.add('loaded')">
+        <div class="note-body">
+          <span class="note-tag tag-video">视频</span><span class="tag-ok">正常</span>
+          <div class="note-metrics">
+            <div class="note-metric"><b>—</b><br>CTR</div>
+            <div class="note-metric"><b>—</b><br>CES</div>
+          </div>
+          <div class="note-metric" style="margin-top:6px;font-size:11px;">推荐50.6% + 视频推荐38%</div>
+          <a class="note-link" href="https://www.xiaohongshu.com/explore/6a3138fe000000002103ccdb" target="_blank">查看笔记 →</a>
+        </div>
+      </div>
+
+      <!-- 6a31385f 命中柔性标签 -->
+      <div class="note-card">
+        <div class="cover-placeholder" style="background:linear-gradient(135deg,#ff9f0a,#ff6b00)">⚠️<span>6a31385f</span></div>
+        <img class="cover" src="covers/6a31385f.jpg" alt="封面" onload="this.closest('.note-card').classList.add('loaded')">
+        <div class="note-body">
+          <span class="note-tag tag-video">视频</span><span class="tag-warn">柔性标签×3</span>
+          <div class="note-metrics">
+            <div class="note-metric"><b>—</b><br>CTR</div>
+            <div class="note-metric"><b>—</b><br>CES</div>
+          </div>
+          <div class="note-metric" style="margin-top:6px;font-size:11px;">推荐 90.4% | 搜索 3.6%</div>
+          <a class="note-link" href="https://www.xiaohongshu.com/explore/6a31385f000000002102252a" target="_blank">查看笔记 →</a>
+        </div>
+      </div>
+
+      <!-- 6a293483 命中柔性标签，CES最低 -->
+      <div class="note-card">
+        <div class="cover-placeholder" style="background:linear-gradient(135deg,#ff3b30,#c0392b)">⚠️<span>6a293483</span></div>
+        <img class="cover" src="covers/6a293483.jpg" alt="封面" onload="this.closest('.note-card').classList.add('loaded')">
+        <div class="note-body">
+          <span class="note-tag tag-video">视频</span><span class="tag-warn">柔性标签×1</span>
+          <div class="note-metrics">
+            <div class="note-metric"><b class="bad">3.00%</b><br>CTR ⚠️</div>
+            <div class="note-metric"><b class="warn">0.99</b><br>CES</div>
+          </div>
+          <div class="note-metric" style="margin-top:6px;font-size:11px;">推荐56.1% | 搜索19.5%</div>
+          <a class="note-link" href="https://www.xiaohongshu.com/explore/6a29348300000000080017ec" target="_blank">查看笔记 →</a>
+        </div>
+      </div>
+
+      <!-- 69f1c29a 命中柔性标签×4，但CES最高 -->
+      <div class="note-card">
+        <div class="cover-placeholder" style="background:linear-gradient(135deg,#30d158,#00a832)">⭐<span>69f1c29a</span></div>
+        <img class="cover" src="covers/69f1c29a.jpg" alt="封面" onload="this.closest('.note-card').classList.add('loaded')">
+        <div class="note-body">
+          <span class="note-tag tag-video">视频</span><span class="tag-warn">柔性标签×4</span>
+          <div class="note-metrics">
+            <div class="note-metric"><b class="bad">5.76%</b><br>CTR</div>
+            <div class="note-metric"><b class="good">3.42</b><br>CES ⭐最高</div>
+          </div>
+          <div class="note-metric" style="margin-top:6px;font-size:11px;">搜索 48.2% ⭐ | 推荐20.7%</div>
+          <a class="note-link" href="https://www.xiaohongshu.com/explore/69f1c29a000000001a02f167" target="_blank">查看笔记 →</a>
+        </div>
+      </div>
+
+      <!-- 69e32fcb 正常，CTR相对最好 -->
+      <div class="note-card">
+        <div class="cover-placeholder" style="background:linear-gradient(135deg,#007aff,#0055cc)">📸<span>69e32fcb</span></div>
+        <img class="cover" src="covers/69e32fcb.jpg" alt="封面" onload="this.closest('.note-card').classList.add('loaded')">
+        <div class="note-body">
+          <span class="note-tag tag-video">视频</span><span class="tag-ok">正常</span>
+          <div class="note-metrics">
+            <div class="note-metric"><b class="warn">9.83%</b><br>CTR ↑最高</div>
+            <div class="note-metric"><b class="warn">1.34</b><br>CES</div>
+          </div>
+          <div class="note-metric" style="margin-top:6px;font-size:11px;">推荐 80.9% | 搜索10.6%</div>
+          <a class="note-link" href="https://www.xiaohongshu.com/explore/69e32fcb000000001e00ca27" target="_blank">查看笔记 →</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 图表 -->
+  <div class="section">
+    <div class="section-title"><span>④</span>数据分布分析</div>
+    <div class="charts-row">
+      <div class="chart-card">
+        <div class="c-title">流量来源分布（69e32fcb，状态正常的笔记）</div>
+        <div class="chart-box" id="sourceChart"></div>
+      </div>
+      <div class="chart-card">
+        <div class="c-title">CTR & CES 与基准对比</div>
+        <div class="chart-box" id="benchChart"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 最高 vs 最低 -->
+  <div class="section">
+    <div class="section-title"><span>⑤</span>最高互动 vs 最低互动 笔记对比</div>
+    <div class="compare-grid">
+
+      <div class="compare-card best">
+        <h3>✅ 最高互动笔记（69f1c29a）</h3>
+        <div class="metrics-row">
+          <div class="m-item"><div class="mv good">3.42</div><div class="ml">CES</div></div>
+          <div class="m-item"><div class="mv">5.76%</div><div class="ml">CTR</div></div>
+          <div class="m-item"><div class="mv">33.9%</div><div class="ml">满屏率</div></div>
+          <div class="m-item"><div class="mv good">48.2%</div><div class="ml">搜索占比</div></div>
+        </div>
+        <div style="font-size:12px;color:#86868b;margin-bottom:12px;">垂类：儿童写真 &nbsp;|&nbsp; 状态：命中柔性标签×4（已压制流量）</div>
+        <div class="analysis-block">
+          <div class="a-title">🌟 Why 好——做对了什么</div>
+          <ul>
+            <li>搜索占比高达 48.2%，说明内容本身有搜索价值，题材命中用户需求</li>
+            <li>CES 3.42 大幅超过垂类粉段均值（2.36），内容引发真实共鸣和互动</li>
+            <li>满屏率 33.9% 高于大盘均值（27.46%），用户愿意看完视频</li>
+            <li>即便命中柔性标签被压制，互动质量仍然最高——说明内容本身质量可</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="compare-card worst">
+        <h3>❌ 最低互动笔记（6a293483）</h3>
+        <div class="metrics-row">
+          <div class="m-item"><div class="mv bad">0.99</div><div class="ml">CES</div></div>
+          <div class="m-item"><div class="mv bad">3.00%</div><div class="ml">CTR</div></div>
+          <div class="m-item"><div class="mv">—</div><div class="ml">满屏率</div></div>
+          <div class="m-item"><div class="mv">56.1%</div><div class="ml">推荐占比</div></div>
+        </div>
+        <div style="font-size:12px;color:#86868b;margin-bottom:12px;">状态：命中柔性标签（2026-06-10 打标）</div>
+        <div class="analysis-block">
+          <div class="a-title">💡 Why 差——问题出在哪</div>
+          <ul>
+            <li>CTR 仅 3.00%，远低于大盘中位数（10.89%），封面/标题缺乏点击吸引力</li>
+            <li>命中柔性标签后流量受限，被推荐系统降权分发</li>
+            <li>CES 0.99，用户看了没有互动意愿，内容共鸣度低</li>
+            <li>系统评估：质量低于大盘CTR、CES均值，投放完成度低于预期</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 流量来源明细 -->
+  <div class="section">
+    <div class="section-title"><span>⑥</span>各笔记流量来源明细</div>
+    <div style="background:white;border-radius:14px;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,0.06);">
+      <table class="source-table">
+        <thead>
+          <tr>
+            <th>笔记</th><th>状态</th><th>首页推荐</th><th>视频推荐</th><th>搜索</th><th>关注页</th><th>个人主页</th><th>其他</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><a href="https://www.xiaohongshu.com/explore/6a3138fe000000002103ccdb" target="_blank" style="color:#6e45e2">6a3138fe</a></td>
+            <td><span class="tag-ok">正常</span></td>
+            <td><b>50.6%</b></td><td>38.0%</td><td>1.6%</td><td>0.8%</td><td>4.7%</td><td>4.3%</td>
+          </tr>
+          <tr style="background:#fafafa">
+            <td><a href="https://www.xiaohongshu.com/explore/6a31385f000000002102252a" target="_blank" style="color:#6e45e2">6a31385f</a></td>
+            <td><span class="tag-warn">柔标×3</span></td>
+            <td><b>90.4%</b></td><td>0.9%</td><td>3.6%</td><td>0.8%</td><td>1.8%</td><td>2.6%</td>
+          </tr>
+          <tr>
+            <td><a href="https://www.xiaohongshu.com/explore/6a29348300000000080017ec" target="_blank" style="color:#6e45e2">6a293483</a></td>
+            <td><span class="tag-warn">柔标×1</span></td>
+            <td><b>56.1%</b></td><td>7.1%</td><td>19.5%</td><td>6.0%</td><td>6.4%</td><td>4.8%</td>
+          </tr>
+          <tr style="background:#fafafa">
+            <td><a href="https://www.xiaohongshu.com/explore/69f1c29a000000001a02f167" target="_blank" style="color:#6e45e2">69f1c29a</a></td>
+            <td><span class="tag-warn">柔标×4</span></td>
+            <td>20.7%</td><td>5.6%</td><td><b class="good">48.2%</b></td><td>10.0%</td><td>10.0%</td><td>5.6%</td>
+          </tr>
+          <tr>
+            <td><a href="https://www.xiaohongshu.com/explore/69e32fcb000000001e00ca27" target="_blank" style="color:#6e45e2">69e32fcb</a></td>
+            <td><span class="tag-ok">正常</span></td>
+            <td><b>80.9%</b></td><td>1.7%</td><td>10.6%</td><td>2.0%</td><td>2.7%</td><td>2.0%</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div style="font-size:12px;color:#86868b;margin-top:8px;padding-left:4px;">💡 69f1c29a 搜索占比 48.2% 是亮点——说明儿童写真方向有搜索价值，应重点布局。</div>
+  </div>
+
+  <!-- 问题诊断 -->
+  <div class="section">
+    <div class="section-title"><span>⑦</span>核心问题诊断</div>
+    <div class="problem-list">
+      <div class="problem-item">
+        <div class="p-num p1">1</div>
+        <div class="p-content">
+          <div class="p-title">🚨 CTR 严重低于大盘——封面吸引力严重不足</div>
+          <div class="p-desc">28d CTR 仅 2.46%，大盘均值 15.70%，垂类粉段均值 20.01%，差距高达 6-8 倍。即使算法推送出去，用户几乎不点进来。封面画面和标题是最紧急的优化点。对比 5 篇笔记，CTR 最高的 69e32fcb 也只有 9.83%，仍低于大盘中位数（10.89%）。</div>
+        </div>
+      </div>
+      <div class="problem-item">
+        <div class="p-num p2">2</div>
+        <div class="p-content">
+          <div class="p-title">🚨 3篇笔记命中柔性标签——流量被系统压制</div>
+          <div class="p-desc">近5篇中有3篇（60%）命中柔性标签，这是流量低迷的直接原因。建议逐一联系社区审核「百科全薯」申请评估去除。特别是 69f1c29a（命中4个标签），该笔记内容质量最好（CES 3.42），去标签后流量潜力大。</div>
+        </div>
+      </div>
+      <div class="problem-item">
+        <div class="p-num p3">3</div>
+        <div class="p-content">
+          <div class="p-title">⚠️ 发布频率极低——近28天仅发1篇</div>
+          <div class="p-desc">228天创作，仅发了17篇笔记，平均约12天一篇。近28天仅发1篇，属于"发布极低活"状态。频率如此低，算法权重持续衰减，账号基本处于休眠状态。即使内容质量提升，没有发布密度也很难积累用户和数据。</div>
+        </div>
+      </div>
+      <div class="problem-item">
+        <div class="p-num p4">4</div>
+        <div class="p-content">
+          <div class="p-title">⚠️ 内容定位模糊——垂类跨度过大</div>
+          <div class="p-desc">账号同时标注"音乐-演出记录"和"儿童写真"两个方向，受众人群和内容逻辑差异较大。从数据看，儿童写真方向（69f1c29a）搜索表现明显更好，建议收敛到一个垂类深耕。</div>
+        </div>
+      </div>
+      <div class="problem-item">
+        <div class="p-num p5">5</div>
+        <div class="p-content">
+          <div class="p-title">📌 搜索流量有潜力，但尚未系统布局</div>
+          <div class="p-desc">69f1c29a 搜索占比达 48.2%，69e32fcb 也有 10.6%，说明儿童写真赛道有真实搜索需求。但整体关键词布局仍不足，标签挂载不系统，未能形成稳定的搜索流量入口。</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 优化建议 -->
+  <div class="section">
+    <div class="section-title"><span>⑧</span>内容方向建议</div>
+    <table class="suggest-table">
+      <thead>
+        <tr><th>方向</th><th>内容玩法</th><th>标题参考</th><th>预期效果</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="dir">儿童写真 Vlog</td>
+          <td>记录孩子拍写真的全程，展示拍摄过程、妆造、成片对比</td>
+          <td>「带6岁女儿拍第一套写真，成片太惊艳了」</td>
+          <td>搜索需求大，收藏率高</td>
+        </tr>
+        <tr>
+          <td class="dir">亲子音乐演出记录</td>
+          <td>记录孩子参加演出/汇演的完整过程，加上妈妈视角旁白</td>
+          <td>「女儿第一次登台表演，台下妈妈哭了」</td>
+          <td>情感共鸣强，互动率高</td>
+        </tr>
+        <tr>
+          <td class="dir">穿搭/造型选片攻略</td>
+          <td>分享写真拍摄前的选题、选服装、选场地经验</td>
+          <td>「拍儿童写真踩过的坑，现在全告诉你」</td>
+          <td>实用型内容，搜索收藏双高</td>
+        </tr>
+        <tr>
+          <td class="dir">成长记录合集</td>
+          <td>把孩子不同年龄段的成长视频剪成合集</td>
+          <td>「嫚彤0-6岁成长记录 | 每一帧都想珍藏」</td>
+          <td>人设建立，粉丝粘性强</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 封面标题优化 -->
+  <div class="section">
+    <div class="section-title"><span>⑨</span>封面 &amp; 标题优化建议</div>
+    <div class="tips-grid">
+      <div class="tip-card">
+        <h4>🖼️ 封面优化（最紧急）</h4>
+        <div class="bad-tip">❌ 避免：封面画面不清晰、主体不突出、无文字说明</div>
+        <div class="bad-tip">❌ 避免：视频封面截帧随意，没有设计感</div>
+        <div class="good-tip">✅ 孩子表情生动、居中大图，颜色明快</div>
+        <div class="good-tip">✅ 封面加大字说明内容，比如「写真现场」「成长记录」</div>
+        <div class="good-tip">✅ 统一视觉风格，建立账号识别度</div>
+      </div>
+      <div class="tip-card">
+        <h4>📝 标题优化</h4>
+        <div class="bad-tip">❌ 避免：纯情感词、无关键词（"宝贝真棒"）</div>
+        <div class="bad-tip">❌ 避免：没有搜索词，无法被发现</div>
+        <div class="good-tip">✅ 必含关键词：儿童写真 / 宝宝演出 / 亲子记录</div>
+        <div class="good-tip">✅ 加具体场景：年龄 + 场合（「6岁/钢琴演出/汇演」）</div>
+        <div class="good-tip">✅ 带情绪钩子：第一次 / 惊艳 / 感动 / 泪目</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 发布策略 -->
+  <div class="section">
+    <div class="section-title"><span>⑩</span>发布策略建议</div>
+    <div class="strategy-grid">
+      <div class="strat-card">
+        <div class="s-icon">🚑</div>
+        <div class="s-title">优先处理柔性标签</div>
+        <div class="s-desc">联系百科全薯申请去除<br>3篇被压制的笔记<br>尤其是 69f1c29a（质量最好）</div>
+      </div>
+      <div class="strat-card">
+        <div class="s-icon">📅</div>
+        <div class="s-title">提升发布频率</div>
+        <div class="s-desc">当前约12天/篇 → 目标每周1-2篇<br>保持算法活跃权重<br>短期目标：28d 发4篇以上</div>
+      </div>
+      <div class="strat-card">
+        <div class="s-icon">🎯</div>
+        <div class="s-title">聚焦儿童写真垂类</div>
+        <div class="s-desc">搜索数据证明该方向有需求<br>收敛定位，放弃音乐演出混发<br>每篇必挂兴趣标签</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  📊 数据来源：小红书内部系统 &nbsp;|&nbsp; 生成时间：2026-06-17 &nbsp;|&nbsp; 数据时效：近28天
+</div>
+
+<script>
+var sourceChart = echarts.init(document.getElementById('sourceChart'));
+sourceChart.setOption({
+  tooltip: { trigger: 'item', formatter: '{b}: {c}%' },
+  legend: { bottom: 0, textStyle: { fontSize: 11 } },
+  color: ['#6e45e2', '#88d3ce', '#30d158', '#ff9f0a', '#ff3b30'],
+  series: [{
+    type: 'pie', radius: ['40%', '65%'], center: ['50%', '42%'],
+    data: [
+      { value: 80.9, name: '首页推荐' },
+      { value: 10.6, name: '搜索' },
+      { value: 2.7, name: '个人主页' },
+      { value: 2.0, name: '关注页面' },
+      { value: 1.7, name: '视频推荐' },
+      { value: 2.0, name: '其他' }
+    ],
+    label: { formatter: '{b}\n{c}%', fontSize: 11 }
+  }]
+});
+
+var benchChart = echarts.init(document.getElementById('benchChart'));
+benchChart.setOption({
+  tooltip: { trigger: 'axis' },
+  legend: { bottom: 0, textStyle: { fontSize: 11 } },
+  color: ['#6e45e2', '#ff9f0a', '#007aff'],
+  xAxis: { type: 'category', data: ['CTR', 'CES'], axisLabel: { fontFamily: 'Georgia', fontSize: 12 } },
+  yAxis: { type: 'value', axisLabel: { fontFamily: 'Georgia' } },
+  series: [
+    { name: '王莉（嫚彤）(28d)', type: 'bar', barWidth: 28, data: [2.46, 0.94], label: { show: true, position: 'top', fontSize: 11 } },
+    { name: '大盘均值', type: 'bar', barWidth: 28, data: [15.70, 2.60], label: { show: true, position: 'top', fontSize: 11 } },
+    { name: '垂类粉段均值', type: 'bar', barWidth: 28, data: [20.01, 2.36], label: { show: true, position: 'top', fontSize: 11 } }
+  ]
+});
+
+window.addEventListener('resize', function() { sourceChart.resize(); benchChart.resize(); });
+</script>
+</body>
+</html>
